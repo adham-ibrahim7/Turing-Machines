@@ -45,6 +45,10 @@ public class Tape {
     }
 
     public void move(final Direction direction) {
+        if (direction == Direction.NULL) {
+            return;
+        }
+
         if (direction == Direction.LEFT) {
             moveLeft();
         } else if (direction == Direction.RIGHT) {
@@ -69,14 +73,29 @@ public class Tape {
     }
 
     public enum Direction {
-        LEFT,
-        RIGHT,
-        //TODO add no movement
-        NONE;
+        LEFT("L"),
+        RIGHT("R"),
+        NULL("NULL");
+
+        private String directionName;
+
+        private Direction(String directionName) {
+            this.directionName = directionName;
+        }
+
+        @Override
+        public String toString() {
+            return directionName;
+        }
 
         public static Direction get(String transitionDirectionString) {
-            //TODO add Direction.get()
-            return null;
+            for (Direction direction : values()) {
+                if (direction.toString().equals(transitionDirectionString)) {
+                    return direction;
+                }
+            }
+
+            throw new IllegalArgumentException("No such direction: " + transitionDirectionString);
         }
     }
 

@@ -2,23 +2,25 @@ package turing;/*
  * Created by Adham Ibrahim on 11/5/2020
  */
 
+import java.util.List;
+
 public class Program {
 
     //TODO rethink names? start/initial state? ...
     private final State startState;
     //TODO multiple termination states?
-    private final State terminationState;
+    private final List<State> finalStates;
 
     private boolean terminated;
 
     private Tape tape;
     private State currentState;
 
-    public Program(State startState, State terminationState, Tape initialTape) {
+    public Program(State startState, List<State> finalStates, Tape initialTape) {
         this.startState = startState;
         this.tape = initialTape;
         this.currentState = startState;
-        this.terminationState = terminationState;
+        this.finalStates = finalStates;
         this.terminated = false;
     }
 
@@ -33,7 +35,7 @@ public class Program {
         tape.write(transition.getWriteSymbol());
         tape.move(transition.getTransitionDirection());
 
-        if (currentState == terminationState) {
+        if (finalStates.contains(currentState)) {
             terminated = true;
         }
     }

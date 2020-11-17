@@ -1,9 +1,12 @@
-#as of now this is useless
+#Add one to a binary integer
+#-----------------------------------------------------------------
+
+#as of now this line is useless
 alphabet: ["0", "1"]
 
 initial tape: ["1", "1", "0", "1"]
 
-start state: start
+start state: right
 final states: [done]
 
 states:

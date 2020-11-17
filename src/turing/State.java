@@ -9,7 +9,6 @@ import java.util.Map;
 
 public class State {
 
-    //TODO ensure unique names
     private final String name;
 
     final Map<Symbol, Transition> transitions;
@@ -51,19 +50,15 @@ public class State {
         transitions.put(symbol, transition);
     }
 
-    /*@Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(this.name + ": [");
+        for (Symbol transitionSymbol : transitions.keySet()) {
+            builder.append(transitionSymbol + "->" + transitions.get(transitionSymbol).toString() + ",");
         }
-
-        if (! (o instanceof turing.State)) {
-            return false;
-        }
-
-        turing.State s = (turing.State) o;
-
-        return this.name.equals(s.name);
-    }*/
+        builder.append("]");
+        return new String(builder);
+    }
 
 }

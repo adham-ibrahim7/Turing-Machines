@@ -10,6 +10,7 @@ import turing.Tape.Direction;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,24 +27,24 @@ public class LoadYAML {
 
         List<String> initialTapeStrings = (List<String>) programMap.get("initial tape");
 
-        Tape tape = Tape.fromStrings(initialTapeStrings);
-
-        String startStateName = (String) programMap.get("initial state");
-        List<String> finalStateNames = (List<String>) programMap.get("final state");
+        String startStateName = (String) programMap.get("start state");
+        List<String> finalStateNames = (List<String>) programMap.get("final states");
 
         Map<String, Object> stateObjects = (Map<String, Object>) programMap.get("states");
 
         Map<String, State> states = new HashMap<String, State>();
 
-        for (String stateName : stateObjects.keySet()) {
-            if (states.containsKey(stateName)) {
+        for (String currentStateName : stateObjects.keySet()) {
+            if (states.containsKey(currentStateName)) {
                 //TODO rename these exceptions?
                 throw new IllegalArgumentException("Cannot have two states with the same name!");
             }
 
-            states.put(stateName, new State(stateName));
+            states.put(currentStateName, new State(currentStateName));
+        }
 
-            List<Map<String, String>> transitions = (List<Map<String, String>>) stateObjects.get(stateName);
+        for (String currentStateName : stateObjects.keySet()) {
+            List<Map<String, String>> transitions = (List<Map<String, String>>) stateObjects.get(currentStateName);
 
             for (Map<String, String> transitionInfo : transitions) {
                 if (!transitionInfo.containsKey("read")) {
@@ -58,22 +59,24 @@ public class LoadYAML {
                 String readSymbolString = transitionInfo.get("read");
                 String writeSymbolString = transitionInfo.getOrDefault("write", "NULL");
                 String transitionDirectionString = transitionInfo.getOrDefault("move tape", "NULL");
-                String transitionStateName = transitionInfo.getOrDefault("go to", stateName);
+                String transitionStateName = transitionInfo.getOrDefault("go to", currentStateName);
 
                 Transition transition = new Transition(Symbol.get(writeSymbolString), Direction.get(transitionDirectionString), states.get(transitionStateName));
 
-                states.get(stateName).addTransition(Symbol.get(readSymbolString), transition);
+                states.get(currentStateName).addTransition(Symbol.get(readSymbolString), transition);
             }
-
         }
 
-        //TODO create terminationStates
+        State startState = states.get(startStateName);
 
-        return new Program(states.get(startStateName), null, tape);
+        List<State> finalStates = new ArrayList<>();
+        for (String finalStateName : finalStateNames) {
+            finalStates.add(states.get(finalStateName));
+        }
 
-    }
+        Tape tape = Tape.fromStrings(initialTapeStrings);
 
-    public static void main(String[] args) throws FileNotFoundException {
-        Program program = load("yaml-examples/add_one.yaml");
+        return new Program(startState, finalStates, tape);
+
     }
 }
