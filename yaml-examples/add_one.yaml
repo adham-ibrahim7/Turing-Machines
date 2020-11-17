@@ -1,0 +1,18 @@
+#as of now this is useless
+alphabet: ["0", "1"]
+
+initial tape: ["1", "1", "0", "1"]
+
+start state: start
+final states: [done]
+
+states:
+  right:
+    - {read: "0", move tape: R}
+    - {read: "1", move tape: R}
+    - {read: "_", move tape: L, go to: carry}
+  carry:
+    - {read: "0", write: "1", move tape : L, go to: done}
+    - {read: "1", write: "0", move tape: L}
+    - {read: "_", write: "1", move tape: L, go to: done}
+  done: []

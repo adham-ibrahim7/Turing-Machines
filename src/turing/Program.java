@@ -1,13 +1,12 @@
-/*
+package turing;/*
  * Created by Adham Ibrahim on 11/5/2020
  */
 
-import java.util.List;
-
 public class Program {
 
+    //TODO rethink names? start/initial state? ...
     private final State startState;
-    //TODO refactor termination to instead be if a state reads a value it has no transition for
+    //TODO multiple termination states?
     private final State terminationState;
 
     private boolean terminated;
@@ -28,10 +27,10 @@ public class Program {
     }
 
     public void next() {
-        Value currentValue = tape.read();
-        Transition transition = currentState.getTransition(currentValue);
+        Symbol currentSymbol = tape.read();
+        Transition transition = currentState.getTransition(currentSymbol);
         currentState = transition.getTransitionState();
-        tape.write(transition.getWriteValue());
+        tape.write(transition.getWriteSymbol());
         tape.move(transition.getTransitionDirection());
 
         if (currentState == terminationState) {
