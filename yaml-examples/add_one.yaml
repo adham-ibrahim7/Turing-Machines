@@ -13,9 +13,9 @@ states:
   right:
     - {read: "0", move tape: R}
     - {read: "1", move tape: R}
-    - {read: "_", move tape: L, go to: carry}
+    - {read: " ", move tape: L, go to: carry}
   carry:
     - {read: "0", write: "1", move tape : L, go to: done}
     - {read: "1", write: "0", move tape: L}
-    - {read: "_", write: "1", move tape: L, go to: done}
+    - {read: " ", write: "1", move tape: L, go to: done}
   done: []

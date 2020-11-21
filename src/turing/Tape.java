@@ -9,36 +9,36 @@ import java.util.List;
 
 public class Tape {
 
-    //private Alphabet alphabet;
+    private Alphabet alphabet;
 
-    private List<Symbol> symbols;
+    private List<String> symbols;
     private int pointer;
 
-    private Tape() {
-        symbols = new ArrayList<>();
-        pointer = 0;
-    }
-
-    private Tape(List<String> initialValues) {
-        this();
-        for (String symbolString : initialValues) {
-            symbols.add(Symbol.get(symbolString));
+    private Tape(List<String> initialValues, Alphabet alphabet) {
+        this.symbols = new ArrayList<>();
+        this.pointer = 0;
+        this.alphabet = alphabet;
+        for (String symbol : initialValues) {
+            if (!alphabet.isSymbol(symbol)) {
+                throw new IllegalArgumentException("Illegal initial tape: contains " + symbol + " that is not in alphabet.");
+            }
+            symbols.add(symbol);
         }
     }
 
-    public static Tape fromStrings(final List<String> valueStrings) {
-        return new Tape(valueStrings);
+    public static Tape fromStrings(final List<String> valueStrings, Alphabet alphabet) {
+        return new Tape(valueStrings, alphabet);
     }
 
-    public Symbol read() {
+    public String read() {
         if (pointer < 0 || pointer >= symbols.size())
             throw new RuntimeException("Attempting to read out of bounds: " + pointer);
 
         return symbols.get(pointer);
     }
 
-    public void write(final Symbol symbol) {
-        if (symbol == Symbol.NULL)
+    public void write(final String symbol) {
+        if (symbol == null)
             return;
 
         symbols.set(pointer, symbol);
@@ -58,7 +58,7 @@ public class Tape {
 
     private void moveLeft() {
         if (pointer == 0) {
-            symbols.add(0, Symbol.BLANK);
+            symbols.add(0, " ");
         } else {
             pointer--;
         }
@@ -66,7 +66,8 @@ public class Tape {
 
     private void moveRight() {
         if (pointer == symbols.size()-1) {
-            symbols.add(symbols.size(), Symbol.BLANK);
+            //TODO remove hardcoded blank
+            symbols.add(symbols.size(), " ");
         } else {
             pointer++;
         }

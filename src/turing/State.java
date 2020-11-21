@@ -7,11 +7,12 @@ package turing;
 import java.util.HashMap;
 import java.util.Map;
 
+//TODO add StateBuilder
 public class State {
 
     private final String name;
 
-    final Map<Symbol, Transition> transitions;
+    final Map<String, Transition> transitions;
 
     public State(String name) {
         this.name = name;
@@ -42,11 +43,11 @@ public class State {
         return this.name;
     }
 
-    public Transition getTransition(Symbol symbol) {
+    public Transition getTransition(String symbol) {
         return transitions.get(symbol);
     }
 
-    public void addTransition(Symbol symbol, Transition transition) {
+    public void addTransition(String symbol, Transition transition) {
         transitions.put(symbol, transition);
     }
 
@@ -54,7 +55,7 @@ public class State {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append(this.name + ": [");
-        for (Symbol transitionSymbol : transitions.keySet()) {
+        for (String transitionSymbol : transitions.keySet()) {
             builder.append(transitionSymbol + "->" + transitions.get(transitionSymbol).toString() + ",");
         }
         builder.append("]");

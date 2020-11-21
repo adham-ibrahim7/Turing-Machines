@@ -16,14 +16,16 @@ import java.util.List;
 import java.util.Map;
 
 public class LoadYAML {
+
     private static Yaml yaml = new Yaml();
 
+    //TODO check yaml program validity
     public static Program load(String filepath) throws FileNotFoundException {
         InputStream file = new FileInputStream(filepath);
         Map<String, Object> programMap = yaml.load(file);
 
-        //TODO read in alphabet?
-        List<String> alphabet = (List<String>) programMap.get("alphabet");
+        List<String> alphabetStrings = (List<String>) programMap.get("alphabet");
+        Alphabet alphabet = new Alphabet(alphabetStrings);
 
         List<String> initialTapeStrings = (List<String>) programMap.get("initial tape");
 
@@ -57,13 +59,13 @@ public class LoadYAML {
                 }
 
                 String readSymbolString = transitionInfo.get("read");
-                String writeSymbolString = transitionInfo.getOrDefault("write", "NULL");
-                String transitionDirectionString = transitionInfo.getOrDefault("move tape", "NULL");
+                String writeSymbolString = transitionInfo.get("write");
+                String transitionDirectionString = transitionInfo.get("move tape");
                 String transitionStateName = transitionInfo.getOrDefault("go to", currentStateName);
 
-                Transition transition = new Transition(Symbol.get(writeSymbolString), Direction.get(transitionDirectionString), states.get(transitionStateName));
+                Transition transition = new Transition(writeSymbolString, Direction.get(transitionDirectionString), states.get(transitionStateName));
 
-                states.get(currentStateName).addTransition(Symbol.get(readSymbolString), transition);
+                states.get(currentStateName).addTransition(readSymbolString, transition);
             }
         }
 
@@ -74,9 +76,9 @@ public class LoadYAML {
             finalStates.add(states.get(finalStateName));
         }
 
-        Tape tape = Tape.fromStrings(initialTapeStrings);
+        Tape tape = Tape.fromStrings(initialTapeStrings, alphabet);
 
         return new Program(startState, finalStates, tape);
-
     }
+
 }

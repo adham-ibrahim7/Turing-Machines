@@ -10,19 +10,19 @@ public class Transition {
 
     private final State transitionState;
     private final Direction transitionDirection;
-    private final Symbol writeSymbol;
+    private final String writeSymbol;
 
     private final String cachedToString;
 
-    public Transition(Symbol writeSymbol, Direction transitionDirection, State transitionState) {
+    public Transition(String writeSymbol, Direction transitionDirection, State transitionState) {
         this.writeSymbol = writeSymbol;
         this.transitionDirection = transitionDirection;
         this.transitionState = transitionState;
 
-        this.cachedToString = "";//cacheToString();
+        this.cachedToString = cacheToString();
     }
 
-    public Symbol getWriteSymbol() {
+    public String getWriteSymbol() {
         return writeSymbol;
     }
 
@@ -37,7 +37,7 @@ public class Transition {
     private String cacheToString() {
         StringBuilder builder = new StringBuilder();
         builder.append("{");
-        builder.append("write: " + writeSymbol.toString() + ", ");
+        builder.append("write: " + writeSymbol + ", ");
         builder.append("move tape: " + transitionDirection.toString() + ", ");
         builder.append("go to: " + transitionState.toString());
         return new String(builder);

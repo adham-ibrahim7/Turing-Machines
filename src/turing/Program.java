@@ -8,7 +8,6 @@ public class Program {
 
     //TODO rethink names? start/initial state? ...
     private final State startState;
-    //TODO multiple termination states?
     private final List<State> finalStates;
 
     private boolean terminated;
@@ -29,7 +28,7 @@ public class Program {
     }
 
     public void next() {
-        Symbol currentSymbol = tape.read();
+        String currentSymbol = tape.read();
         Transition transition = currentState.getTransition(currentSymbol);
         currentState = transition.getTransitionState();
         tape.write(transition.getWriteSymbol());
