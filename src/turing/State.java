@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 //TODO add StateBuilder
+//TODO add accept/reject state
 public class State {
 
     private final String name;
