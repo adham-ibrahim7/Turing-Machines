@@ -11,18 +11,18 @@ public class Tape {
 
     private Alphabet alphabet;
 
-    private List<String> symbols;
+    private List<String> contents;
     private int pointer;
 
     private Tape(List<String> initialValues, Alphabet alphabet) {
-        this.symbols = new ArrayList<>();
+        this.contents = new ArrayList<>();
         this.pointer = 0;
         this.alphabet = alphabet;
         for (String symbol : initialValues) {
             if (!alphabet.isSymbol(symbol)) {
                 throw new IllegalArgumentException("Illegal initial tape: contains " + symbol + " that is not in alphabet.");
             }
-            symbols.add(symbol);
+            contents.add(symbol);
         }
     }
 
@@ -31,17 +31,17 @@ public class Tape {
     }
 
     public String read() {
-        if (pointer < 0 || pointer >= symbols.size())
+        if (pointer < 0 || pointer >= contents.size())
             throw new RuntimeException("Attempting to read out of bounds: " + pointer);
 
-        return symbols.get(pointer);
+        return contents.get(pointer);
     }
 
     public void write(final String symbol) {
         if (symbol == null)
             return;
 
-        symbols.set(pointer, symbol);
+        contents.set(pointer, symbol);
     }
 
     public void move(final Direction direction) {
@@ -58,16 +58,16 @@ public class Tape {
 
     private void moveLeft() {
         if (pointer == 0) {
-            symbols.add(0, " ");
+            contents.add(0, " ");
         } else {
             pointer--;
         }
     }
 
     private void moveRight() {
-        if (pointer == symbols.size()-1) {
+        if (pointer == contents.size()-1) {
             //TODO remove hardcoded blank
-            symbols.add(symbols.size(), " ");
+            contents.add(contents.size(), " ");
         } else {
             pointer++;
         }
@@ -102,7 +102,12 @@ public class Tape {
 
     @Override
     public String toString() {
-        return symbols.toString();
+        StringBuilder builder = new StringBuilder();
+        builder.append("|");
+        for (String symbol : this.contents) {
+            builder.append(symbol).append("|");
+        }
+        return new String(builder);
     }
 
 }

@@ -45,8 +45,10 @@ public class Program {
         }
     }
 
-    public String result() {
+    public String getTapeContents() {
         return tape.toString();
     }
+
+    public State getCurrentState() {return currentState;}
 
 }

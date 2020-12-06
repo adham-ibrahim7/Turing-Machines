@@ -2,7 +2,7 @@
 Simulating turing machine programs in java.
 
 Reads in a program from a YAML file, runs it, and determines the 
-final tapes configuration.
+final tape's configuration.
 
 YAML format is as follows. See ./yaml-examples for example programs.
 
@@ -22,3 +22,6 @@ and `final states` to a list of strings contained in the states mapping
     - if `write` is omitted, the tape will not be written to
     - if `move tape` is omitted, the tape will not move
     - if `go to` is omitted, the execution will stay in the current state
+  
+Run `java Turing <yaml file>` to execute a program that halts and print out the tape
+contents, and the state that the program halted in.
